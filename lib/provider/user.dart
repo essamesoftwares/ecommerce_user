@@ -134,7 +134,7 @@ class UserProvider with ChangeNotifier {
     print("THE PRODUCT IS: ${cartItem.toString()}");
 
     try {
-      //_userServices.removeFromCart(userId: _user.uid, cartItem: cartItem);
+      _userServices.removeFromCart(userId: _user.uid, cartItem: cartItem);
       return true;
     } catch (e) {
       print("THE ERROR ${e.toString()}");
@@ -150,5 +150,17 @@ class UserProvider with ChangeNotifier {
   Future<void> reloadUserModel() async {
     _userModel = await _userServices.getUserById(user.uid);
     notifyListeners();
+  }
+
+  Future<bool> completeFromCart({CartItemModel cartItem}) async {
+    print("THE PRODUCT IS: ${cartItem.toString()}");
+
+    try {
+      //_userServices.removeFromCart(userId: _user.uid, cartItem: cartItem);
+      return true;
+    } catch (e) {
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
   }
 }

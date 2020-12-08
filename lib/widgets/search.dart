@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class Search extends StatefulWidget {
   @override
   _SearchState createState() => _SearchState();
@@ -7,7 +8,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
-    return    Padding(
+    return Padding(
       padding: EdgeInsets.all(15),
       child: Container(
         decoration: BoxDecoration(
@@ -25,13 +26,17 @@ class _SearchState extends State<Search> {
             contentPadding: EdgeInsets.all(10.0),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(color: Colors.white,),
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white,),
+              borderSide: BorderSide(
+                color: Colors.white,
+              ),
               borderRadius: BorderRadius.circular(5.0),
             ),
-            hintText: "E.g: formal dress",
+            hintText: "E.g: vegitables",
             prefixIcon: Icon(
               Icons.search,
               color: Colors.blueGrey[300],

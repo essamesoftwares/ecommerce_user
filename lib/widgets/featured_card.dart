@@ -90,7 +90,7 @@ class FeaturedCard extends StatelessWidget {
                             text: '${product.name} \n',
                             style: TextStyle(fontSize: 18)),
                         TextSpan(
-                            text: '\$${product.price / 100} \n',
+                            text: '\₹${product.price} \n',
                             style: TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold)),
                       ]))),

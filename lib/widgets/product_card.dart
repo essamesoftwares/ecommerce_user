@@ -75,11 +75,11 @@ class ProductCard extends StatelessWidget {
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   TextSpan(
-                    text: '\$${product.price / 100} \t',
+                    text: '₹${product.price} \t',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
-                    text: product.sale ? 'ON SALE ' : "",
+                    text: 'ON SALE',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,

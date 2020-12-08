@@ -4,7 +4,7 @@ import 'package:ecommerce_user/models/product.dart';
 import 'package:ecommerce_user/provider/app.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/cart.dart';
-import 'package:ecommerce_user/widgets/custom_text.dart';
+// import 'package:ecommerce_user/widgets/custom_text.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,16 +21,16 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   final _key = GlobalKey<ScaffoldState>();
-  String _color = "";
-  String _size = "";
+  // String _color = "";
+  // String _size = "";
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _color = widget.product.colors[0];
-    _size = widget.product.sizes[0];
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   _color = widget.product.colors[0];
+  //   _size = widget.product.sizes[0];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Text(
-                              '\$${widget.product.price / 100}',
+                              '₹${widget.product.price}',
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                   color: Colors.white,
@@ -209,79 +209,79 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ]),
                 child: Column(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: CustomText(
-                              text: "Select a Color",
-                              color: white,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: DropdownButton<String>(
-                                value: _color,
-                                style: TextStyle(color: white),
-                                items: widget.product.colors
-                                    .map<DropdownMenuItem<String>>(
-                                        (value) => DropdownMenuItem(
-                                            value: value,
-                                            child: CustomText(
-                                              text: value,
-                                              color: red,
-                                            )))
-                                    .toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _color = value;
-                                  });
-                                }),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: CustomText(
-                              text: "Select a Size",
-                              color: white,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: DropdownButton<String>(
-                                value: _size,
-                                style: TextStyle(color: white),
-                                items: widget.product.sizes
-                                    .map<DropdownMenuItem<String>>(
-                                        (value) => DropdownMenuItem(
-                                            value: value,
-                                            child: CustomText(
-                                              text: value,
-                                              color: red,
-                                            )))
-                                    .toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _size = value;
-                                  });
-                                }),
-                          )
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(0),
+                    //   child: Row(
+                    //     children: <Widget>[
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 8),
+                    //         child: CustomText(
+                    //           text: "Select a Color",
+                    //           color: white,
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 8),
+                    //         child: DropdownButton<String>(
+                    //             value: _color,
+                    //             style: TextStyle(color: white),
+                    //             items: widget.product.colors
+                    //                 .map<DropdownMenuItem<String>>(
+                    //                     (value) => DropdownMenuItem(
+                    //                         value: value,
+                    //                         child: CustomText(
+                    //                           text: value,
+                    //                           color: red,
+                    //                         )))
+                    //                 .toList(),
+                    //             onChanged: (value) {
+                    //               setState(() {
+                    //                 _color = value;
+                    //               });
+                    //             }),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(0),
+                    //   child: Row(
+                    //     children: <Widget>[
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 8),
+                    //         child: CustomText(
+                    //           text: "Select a Size",
+                    //           color: white,
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 8),
+                    //         child: DropdownButton<String>(
+                    //             value: _size,
+                    //             style: TextStyle(color: white),
+                    //             items: widget.product.sizes
+                    //                 .map<DropdownMenuItem<String>>(
+                    //                     (value) => DropdownMenuItem(
+                    //                         value: value,
+                    //                         child: CustomText(
+                    //                           text: value,
+                    //                           color: red,
+                    //                         )))
+                    //                 .toList(),
+                    //             onChanged: (value) {
+                    //               setState(() {
+                    //                 _size = value;
+                    //               });
+                    //             }),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(top: 50),
                         child: Text(
-                            'Description:\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s  Lorem Ipsum has been the industry standard dummy text ever since the 1500s ',
+                            'Description:\nAll kinds of goods are available in such a store. A customer coming to a departmental store can buy all that he wants and need not go to any other shop. ',
                             style: TextStyle(color: Colors.white)),
                       ),
                     ),
@@ -295,9 +295,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                             onPressed: () async {
                               appProvider.changeIsLoading();
                               bool success = await userProvider.addToCart(
-                                  product: widget.product,
-                                  color: _color,
-                                  size: _size);
+                                product: widget.product,
+                                // color: _color,
+                                // size: _size,
+                              );
                               if (success) {
                                 _key.currentState.showSnackBar(
                                     SnackBar(content: Text("Added to Cart!")));

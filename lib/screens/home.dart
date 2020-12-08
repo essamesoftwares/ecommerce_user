@@ -124,10 +124,10 @@ class _HomePageState extends State<HomePage> {
 
             Container(
               decoration: BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20))),
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.grey[100], Colors.white])),
               child: Padding(
                 padding: const EdgeInsets.only(
                     top: 8, left: 8, right: 8, bottom: 10),
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                         changeScreen(context, ProductSearchScreen());
                       },
                       decoration: InputDecoration(
-                        hintText: "blazer, dress...",
+                        hintText: "vegitable, Biscuit...",
                         border: InputBorder.none,
                       ),
                     ),

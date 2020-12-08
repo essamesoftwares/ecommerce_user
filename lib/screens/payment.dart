@@ -1,4 +1,3 @@
-import 'package:ecommerce_user/provider/app.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,6 @@ class Payment extends StatefulWidget {
 
 class _PaymentState extends State<Payment> {
   final razorpay = Razorpay();
-  double finalValue;
 
   TextEditingController controller = TextEditingController();
 
@@ -39,14 +37,14 @@ class _PaymentState extends State<Payment> {
   }
 
   getPayment() {
-    final userProvider = Provider.of<UserProvider>(context);
-    double total = userProvider.userModel.totalCartPrice / 100;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    int amt = userProvider.userModel.totalCartPrice;
     var option = {
       'key': 'rzp_test_q6393U5x52Qfbn',
-      'amount': total,
-      'name': 'sample',
-      //'order_id': '${controller.text.trim()}',
-      'prefill': {'contact': '1234567890', 'email': 'sample@gmail.com'},
+      'amount': amt * 100,
+      // 'name': 'sample',
+      // //'order_id': '${controller.text.trim()}',
+      // 'prefill': {'contact': '1234567890', 'email': 'sample@gmail.com'},
     };
 
     try {
@@ -59,17 +57,80 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final appProvider = Provider.of<AppProvider>(context);
-    double finalValue = userProvider.userModel.totalCartPrice / 100;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text("$finalValue"),
-          RaisedButton(child: Text('pay'), onPressed: () => getPayment()),
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: <Color>[Colors.grey, Colors.blue],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "₹${userProvider.userModel.totalCartPrice}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 100,
+                    fontWeight: FontWeight.w900),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () => getPayment(),
+                child: Container(
+                  //margin: EdgeInsets.only(bottom: 350),
+                  height: 70,
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Icon(
+                                Icons.payment_outlined,
+                                color: Colors.white60,
+                              )),
+                          color: Colors.red,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.black26,
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Proceed to pay",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w900),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

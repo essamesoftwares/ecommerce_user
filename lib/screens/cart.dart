@@ -89,7 +89,7 @@ class _CartScreenState extends State<CartScreen> {
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
                                       text:
-                                          "\$${userProvider.userModel.cart[index].price / 100} \n\n",
+                                          "₹${userProvider.userModel.cart[index].price} \n\n",
                                       style: TextStyle(
                                           color: black,
                                           fontSize: 18,
@@ -142,7 +142,7 @@ class _CartScreenState extends State<CartScreen> {
                           fontSize: 22,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
-                      text: " \₹${userProvider.userModel.totalCartPrice / 100}",
+                      text: "₹${userProvider.userModel.totalCartPrice}",
                       style: TextStyle(
                           color: black,
                           fontSize: 22,
@@ -207,7 +207,7 @@ class _CartScreenState extends State<CartScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'You will be charged \₹${userProvider.userModel.totalCartPrice / 100} upon delivery!',
+                                        'You will be charged \₹${userProvider.userModel.totalCartPrice} upon delivery!',
                                         textAlign: TextAlign.center,
                                       ),
                                       SizedBox(
@@ -230,7 +230,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 in userProvider
                                                     .userModel.cart) {
                                               bool value = await userProvider
-                                                  .removeFromCart(
+                                                  .completeFromCart(
                                                       cartItem: cartItem);
                                               if (value) {
                                                 userProvider.reloadUserModel();

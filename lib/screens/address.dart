@@ -107,7 +107,9 @@ class _AddressState extends State<Address> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'You must enter the pin code';
-                    } else if (value.length == 6) {
+                    } else if (value.length > 6) {
+                      return 'Please enter valid pin code';
+                    } else if (value.length < 6) {
                       return 'Please enter valid pin code';
                     }
                     return null;
