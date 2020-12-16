@@ -21,16 +21,6 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   final _key = GlobalKey<ScaffoldState>();
-  // String _color = "";
-  // String _size = "";
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   _color = widget.product.colors[0];
-  //   _size = widget.product.sizes[0];
-  // }
 
   @override
   Widget build(BuildContext context) {

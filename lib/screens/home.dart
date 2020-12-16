@@ -4,6 +4,7 @@ import 'package:ecommerce_user/provider/product.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/product_search.dart';
 import 'package:ecommerce_user/services/product.dart';
+import 'package:ecommerce_user/widgets/categories.dart';
 import 'package:ecommerce_user/widgets/custom_text.dart';
 import 'package:ecommerce_user/widgets/featured_products.dart';
 import 'package:ecommerce_user/widgets/product_card.dart';
@@ -156,6 +157,20 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+
+
+            //categories
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: new Text('Categories')),
+                ),
+              ],
+            ),
+            Categories(),
 
 //            featured products
             Row(
