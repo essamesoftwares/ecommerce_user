@@ -3,6 +3,7 @@ import 'package:ecommerce_user/models/cart_item.dart';
 import 'package:ecommerce_user/provider/app.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/address.dart';
+import 'package:ecommerce_user/screens/product_details.dart';
 import 'package:ecommerce_user/services/order.dart';
 import 'package:ecommerce_user/widgets/custom_text.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
@@ -23,6 +24,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
+
 
     return Scaffold(
       key: _key,
@@ -89,7 +91,7 @@ class _CartScreenState extends State<CartScreen> {
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
                                       text:
-                                          "₹${userProvider.userModel.cart[index].price} \n\n",
+                                          "₹${userProvider.userModel.cart[index].price * count} \n\n",
                                       style: TextStyle(
                                           color: black,
                                           fontSize: 18,
@@ -142,7 +144,7 @@ class _CartScreenState extends State<CartScreen> {
                           fontSize: 22,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
-                      text: "₹${userProvider.userModel.totalCartPrice}",
+                      text: "₹${userProvider.userModel.totalCartPrice * count}",
                       style: TextStyle(
                           color: black,
                           fontSize: 22,

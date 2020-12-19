@@ -19,6 +19,9 @@ class ProductDetails extends StatefulWidget {
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
+int count=1;
+
+
 class _ProductDetailsState extends State<ProductDetails> {
   final _key = GlobalKey<ScaffoldState>();
 
@@ -122,7 +125,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Text(
-                              '₹${widget.product.price}',
+                              '₹${widget.product.price * count}',
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                   color: Colors.white,
@@ -199,6 +202,49 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ]),
                 child: Column(
                   children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                      child: Column(
+                        children: [
+                          Text("Quantity:", style: TextStyle(color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20),),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Icon(
+                                  Icons.remove,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    if (count > 1) {
+                                      count--;
+                                    }
+                                  });
+                                },
+                              ),
+                              Text(
+                                count.toString(),
+                                style: TextStyle(fontSize: 18, color: Colors.white),
+                              ),
+                              GestureDetector(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    count++;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     // Padding(
                     //   padding: const EdgeInsets.all(0),
                     //   child: Row(
