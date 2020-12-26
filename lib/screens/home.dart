@@ -1,8 +1,10 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:ecommerce_user/helpers/common.dart';
 import 'package:ecommerce_user/helpers/style.dart';
 import 'package:ecommerce_user/provider/product.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/product_search.dart';
+import 'package:ecommerce_user/screens/profile.dart';
 import 'package:ecommerce_user/services/product.dart';
 import 'package:ecommerce_user/widgets/categories.dart';
 import 'package:ecommerce_user/widgets/custom_text.dart';
@@ -31,6 +33,13 @@ class _HomePageState extends State<HomePage> {
     final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.pink,
+        title: Text(
+          "Grocery Shop",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       key: _key,
       backgroundColor: white,
       endDrawer: Drawer(
@@ -73,20 +82,20 @@ class _HomePageState extends State<HomePage> {
 //           Custom App bar
             Stack(
               children: <Widget>[
+                // Positioned(
+                //   top: 10,
+                //   right: 20,
+                //   child: Align(
+                //       alignment: Alignment.topRight,
+                //       child: GestureDetector(
+                //           onTap: () {
+                //             _key.currentState.openEndDrawer();
+                //           },
+                //           child: Icon(Icons.menu))),
+                // ),
                 Positioned(
                   top: 10,
                   right: 20,
-                  child: Align(
-                      alignment: Alignment.topRight,
-                      child: GestureDetector(
-                          onTap: () {
-                            _key.currentState.openEndDrawer();
-                          },
-                          child: Icon(Icons.menu))),
-                ),
-                Positioned(
-                  top: 10,
-                  right: 60,
                   child: Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
@@ -97,13 +106,15 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Positioned(
                   top: 10,
-                  right: 100,
+                  right: 60,
                   child: Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
                           onTap: () {
-                            _key.currentState.showSnackBar(
-                                SnackBar(content: Text("User profile")));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfilePage()));
                           },
                           child: Icon(Icons.person))),
                 ),
@@ -158,41 +169,84 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-
+            SizedBox(
+              height: 150.0,
+              width: 300.0,
+              child: Carousel(
+                animationCurve: Curves.fastOutSlowIn,
+                animationDuration: Duration(milliseconds: 700),
+                dotBgColor: Colors.transparent,
+                dotPosition: DotPosition.bottomCenter,
+                dotIncreasedColor: Colors.red,
+                images: [
+                  AssetImage('images/banner1.png'),
+                  AssetImage('images/banner2.png'),
+                ],
+              ),
+            ),
             //categories
+            SizedBox(height: 15,),
             Row(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: new Text('Categories')),
+                      child: new Text('Categories',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17))),
                 ),
               ],
             ),
             Categories(),
 
 //            featured products
+          SizedBox(height: 15,),
             Row(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: new Text('Featured products')),
+                      child: new Text('Featured products', style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold, fontSize: 17),)),
+                ),
+              ],
+            ),
+            FeaturedProducts(),
+
+            SizedBox(height: 15,),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: new Text('Discount products',style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold, fontSize: 17),)),
+                ),
+              ],
+            ),
+            FeaturedProducts(),
+
+            SizedBox(height: 15,),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: new Text('Today Deals', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 17),)),
                 ),
               ],
             ),
             FeaturedProducts(),
 
 //          recent products
+            SizedBox(height: 15,),
             Row(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: new Text('Recent products')),
+                      child: new Text('Recent products', style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold, fontSize: 17),)),
                 ),
               ],
             ),
@@ -200,8 +254,11 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: productProvider.products
                   .map((item) => GestureDetector(
-                        child: ProductCard(
-                          product: item,
+                        child: Card(
+                          color: Colors.blueAccent,
+                          child: ProductCard(
+                            product: item,
+                          ),
                         ),
                       ))
                   .toList(),

@@ -19,6 +19,18 @@ class _CatProductsState extends State<CatProducts> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        title: Text(
+          "Products",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       key: _key,
       backgroundColor: white,
       endDrawer: Drawer(
@@ -56,10 +68,13 @@ class _CatProductsState extends State<CatProducts> {
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            CatFeatured(),
-          ],
+        child: Card(
+          color: Colors.deepPurple,
+          child: ListView(
+            children: <Widget>[
+              CatFeatured(),
+            ],
+          ),
         ),
       ),
     );

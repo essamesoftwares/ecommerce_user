@@ -8,12 +8,14 @@ class UserModel {
   static const EMAIL = "email";
   static const STRIPE_ID = "stripeId";
   static const CART = "cart";
+  static const IMAGE = "image";
 
 
   String _name;
   String _email;
   String _id;
   String _stripeId;
+  String _image;
   int _priceSum = 0;
 
 
@@ -26,6 +28,8 @@ class UserModel {
 
   String get stripeId => _stripeId;
 
+  String get image => _image;
+
   // public variables
   List<CartItemModel> cart;
   int totalCartPrice;
@@ -36,6 +40,7 @@ class UserModel {
     _name = snapshot.data[NAME];
     _email = snapshot.data[EMAIL];
     _id = snapshot.data[ID];
+    _image = snapshot.data[IMAGE];
     _stripeId = snapshot.data[STRIPE_ID] ?? "";
     cart = _convertCartItems(snapshot.data[CART]?? []);
     totalCartPrice = snapshot.data[CART] == null ? 0 :getTotalPrice(cart: snapshot.data[CART]);

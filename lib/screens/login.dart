@@ -2,6 +2,7 @@ import 'package:ecommerce_user/helpers/style.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/signup.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ class _LoginState extends State<Login> {
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
+  bool hidePass = true;
 
   @override
   Widget build(BuildContext context) {
@@ -69,21 +71,19 @@ class _LoginState extends State<Login> {
                                     padding: const EdgeInsets.only(left: 12.0),
                                     child: TextFormField(
                                       controller: _email,
+                                      keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: "Email",
                                         icon: Icon(Icons.alternate_email),
                                       ),
                                       validator: (value) {
-                                        if (value.isEmpty) {
-                                          Pattern pattern =
-                                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                          RegExp regex = new RegExp(pattern);
-                                          if (!regex.hasMatch(value))
-                                            return 'Please make sure your email address is valid';
-                                          else
-                                            return null;
+                                        if (EmailValidator.validate("${_email.text}")){
+                                          return null;
+                                        }else if(value.isEmpty){
+                                          return "The email field cannot be empty";
                                         }
+                                        return "Please enter your valid email address";
                                       },
                                     ),
                                   ),
@@ -97,22 +97,32 @@ class _LoginState extends State<Login> {
                                   color: Colors.grey.withOpacity(0.3),
                                   elevation: 0.0,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(left: 12.0),
-                                    child: TextFormField(
-                                      controller: _password,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Password",
-                                        icon: Icon(Icons.lock_outline),
+                                    padding: const EdgeInsets.only(left: 0),
+                                    child: ListTile(
+                                      title: TextFormField(
+                                        controller: _password,
+                                        obscureText: hidePass,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Password",
+                                          icon: Icon(Icons.lock_outline),
+                                        ),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return "The password field cannot be empty";
+                                          } else if (value.length < 6) {
+                                            return "the password has to be at least 6 characters long";
+                                          }
+                                          return null;
+                                        },
                                       ),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return "The password field cannot be empty";
-                                        } else if (value.length < 6) {
-                                          return "the password has to be at least 6 characters long";
-                                        }
-                                        return null;
-                                      },
+                                      trailing: IconButton(
+                                          icon: Icon(Icons.remove_red_eye),
+                                          onPressed: () {
+                                            setState(() {
+                                              hidePass = !hidePass;
+                                            });
+                                          }),
                                     ),
                                   ),
                                 ),

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:ecommerce_user/helpers/common.dart';
 import 'package:ecommerce_user/helpers/style.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'home.dart';
 
@@ -19,6 +24,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _password = TextEditingController();
   TextEditingController _name = TextEditingController();
   bool hidePass = true;
+  File _image1;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +66,34 @@ class _SignUpState extends State<SignUp> {
                                     width: 260.0,
                                   )),
                             ),
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  14.0, 8.0, 14.0, 8.0),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: Colors.grey.withOpacity(0.3),
+                                elevation: 0.0,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 12.0),
+                                  child: Container(
+                                    width: 120,
+                                    child: OutlineButton(
+                                        borderSide: BorderSide(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            width: 2.5),
+                                        onPressed: () {
+                                          _selectImage(
+                                            ImagePicker.pickImage(
+                                                source: ImageSource.gallery),
+                                          );
+                                        },
+                                        child: _displayChild1()),
+                                  ),
+                                ),
+                              ),
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.fromLTRB(
                                   14.0, 8.0, 14.0, 8.0),
@@ -99,20 +133,18 @@ class _SignUpState extends State<SignUp> {
                                   child: ListTile(
                                     title: TextFormField(
                                       controller: _email,
+                                      keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
                                           hintText: "Email",
                                           icon: Icon(Icons.alternate_email),
                                           border: InputBorder.none),
                                       validator: (value) {
-                                        if (value.isEmpty) {
-                                          Pattern pattern =
-                                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                          RegExp regex = new RegExp(pattern);
-                                          if (!regex.hasMatch(value))
-                                            return 'Please make sure your email address is valid';
-                                          else
-                                            return null;
+                                        if (EmailValidator.validate("${_email.text}")){
+                                          return null;
+                                        }else if(value.isEmpty){
+                                          return "The email field cannot be empty";
                                         }
+                                        return "Please enter your valid email address";
                                       },
                                     ),
                                   ),
@@ -166,13 +198,40 @@ class _SignUpState extends State<SignUp> {
                                   child: MaterialButton(
                                     onPressed: () async {
                                       if (_formKey.currentState.validate()) {
-                                        if (!await user.signUp(_name.text,
-                                            _email.text, _password.text)) {
-                                          _key.currentState.showSnackBar(
-                                              SnackBar(
-                                                  content:
+                                        if (_image1 != null) {
+                                          String imageUrl1;
+
+                                          final FirebaseStorage storage = FirebaseStorage.instance;
+                                          final String picture1 =
+                                              "Profile${DateTime.now().millisecondsSinceEpoch.toString()}.jpg";
+                                          StorageUploadTask task1 =
+                                          storage.ref().child(picture1).putFile(_image1);
+
+                                          StorageTaskSnapshot snapshot1 =
+                                          await task1.onComplete.then((snapshot) => snapshot);
+
+                                          task1.onComplete.then((snapshot3) async {
+                                            imageUrl1 = await snapshot1.ref.getDownloadURL();
+                                            if (!await user.signUp(_name.text,
+                                                _email.text, _password.text, imageUrl1)) {
+                                              _key.currentState.showSnackBar(
+                                                  SnackBar(
+                                                      content:
                                                       Text("Sign up failed")));
-                                          return;
+                                              return;
+                                            }
+                                          });
+
+                                        }else if(_image1 == null){
+                                          String imageUrl1 = "https://firebasestorage.googleapis.com/v0/b/e-commerce-6ac87.appspot.com/o/Deafult-Profile.png?alt=media&token=9caa25cf-0276-498a-a16e-230dce57dcf2";
+                                          if (!await user.signUp(_name.text,
+                                              _email.text, _password.text, imageUrl1)) {
+                                            _key.currentState.showSnackBar(
+                                                SnackBar(
+                                                    content:
+                                                    Text("Sign up failed")));
+                                            return;
+                                          }
                                         }
                                         changeScreenReplacement(
                                             context, HomePage());
@@ -208,5 +267,26 @@ class _SignUpState extends State<SignUp> {
               ],
             ),
     );
+  }
+  void _selectImage(Future<File> pickImage) async {
+    File tempImg = await pickImage;
+    setState(() => _image1 = tempImg);
+  }
+  Widget _displayChild1() {
+    if (_image1 == null) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(14, 50, 14, 50),
+        child: new Icon(
+          Icons.add,
+          color: Colors.grey,
+        ),
+      );
+    } else {
+      return Image.file(
+        _image1,
+        fit: BoxFit.fill,
+        width: double.infinity,
+      );
+    }
   }
 }

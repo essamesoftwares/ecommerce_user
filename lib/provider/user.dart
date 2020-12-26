@@ -56,7 +56,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> signUp(String name, String email, String password) async {
+  Future<bool> signUp(String name, String email, String password, String image) async {
     try {
       _status = Status.Authenticating;
       notifyListeners();
@@ -67,6 +67,7 @@ class UserProvider with ChangeNotifier {
         _userServices.createUser({
           'name': name,
           'email': email,
+          'image': image,
           'uid': user.user.uid,
           'stripeId': ''
         });
