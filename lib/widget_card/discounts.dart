@@ -1,15 +1,14 @@
 import 'package:ecommerce_user/provider/product.dart';
+import 'package:ecommerce_user/widgets/featured_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'featured_card.dart';
-
-class FeaturedProducts extends StatefulWidget {
+class DiscountProducts extends StatefulWidget {
   @override
-  _FeaturedProductsState createState() => _FeaturedProductsState();
+  _DiscountProductsState createState() => _DiscountProductsState();
 }
 
-class _FeaturedProductsState extends State<FeaturedProducts> {
+class _DiscountProductsState extends State<DiscountProducts> {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
@@ -17,7 +16,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
     return Container(
         height: 150,
         child: Card(
-          color: Colors.black,
+          color: Colors.green,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: productProvider.products.length,

@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:ecommerce_user/helpers/common.dart';
 import 'package:ecommerce_user/helpers/style.dart';
@@ -6,10 +7,13 @@ import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/product_search.dart';
 import 'package:ecommerce_user/screens/profile.dart';
 import 'package:ecommerce_user/services/product.dart';
+import 'package:ecommerce_user/widget_card/discounts.dart';
+import 'package:ecommerce_user/widget_card/today_deals.dart';
 import 'package:ecommerce_user/widgets/categories.dart';
 import 'package:ecommerce_user/widgets/custom_text.dart';
 import 'package:ecommerce_user/widgets/featured_products.dart';
 import 'package:ecommerce_user/widgets/product_card.dart';
+import 'package:ecommerce_user/widgets/recent_card.dart';
 import 'package:ecommerce_user/widgets/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -27,10 +31,31 @@ class _HomePageState extends State<HomePage> {
   final _key = GlobalKey<ScaffoldState>();
   ProductServices _productServices = ProductServices();
 
+  List<String> suggestion = [
+    "Boost",
+    "Tomato",
+    "Carrot",
+    "Good Day",
+    "Horlicks",
+    "Lemon",
+    "Potato",
+    "Oreo",
+    "Tinda",
+    "Cabbage",
+    "Pumbkin",
+    "Marie gold",
+    "Parle-G",
+    "Bournvita",
+    "Beetroot",
+    "Cucumber",
+    "Garlic",
+    "50-50",];
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final productProvider = Provider.of<ProductProvider>(context);
+    GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
 
     return Scaffold(
       appBar: AppBar(
@@ -82,17 +107,6 @@ class _HomePageState extends State<HomePage> {
 //           Custom App bar
             Stack(
               children: <Widget>[
-                // Positioned(
-                //   top: 10,
-                //   right: 20,
-                //   child: Align(
-                //       alignment: Alignment.topRight,
-                //       child: GestureDetector(
-                //           onTap: () {
-                //             _key.currentState.openEndDrawer();
-                //           },
-                //           child: Icon(Icons.menu))),
-                // ),
                 Positioned(
                   top: 10,
                   right: 20,
@@ -123,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'What are\nyou Shopping for?',
                     style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 20,
                         color: Colors.black.withOpacity(0.6),
                         fontWeight: FontWeight.w400),
                   ),
@@ -131,8 +145,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-//          Search Text field
-//            Search(),
 
             Container(
               decoration: BoxDecoration(
@@ -153,14 +165,17 @@ class _HomePageState extends State<HomePage> {
                       Icons.search,
                       color: black,
                     ),
-                    title: TextField(
+                    title: SimpleAutoCompleteTextField(
+                      key: key,
+                      suggestions: suggestion,
+                      textCapitalization: TextCapitalization.sentences,
                       textInputAction: TextInputAction.search,
-                      onSubmitted: (pattern) async {
+                      textSubmitted: (pattern) async {
                         await productProvider.search(productName: pattern);
                         changeScreen(context, ProductSearchScreen());
                       },
                       decoration: InputDecoration(
-                        hintText: "vegitable, Biscuit...",
+                        hintText: "Vegitable, Biscuit...",
                         border: InputBorder.none,
                       ),
                     ),
@@ -170,17 +185,23 @@ class _HomePageState extends State<HomePage> {
             ),
 
             SizedBox(
-              height: 150.0,
+              height: 180.0,
               width: 300.0,
               child: Carousel(
                 animationCurve: Curves.fastOutSlowIn,
                 animationDuration: Duration(milliseconds: 700),
-                dotBgColor: Colors.transparent,
+                indicatorBgPadding: 1.0,
+                dotSize: 3,
+                dotBgColor: Colors.grey[400],
                 dotPosition: DotPosition.bottomCenter,
-                dotIncreasedColor: Colors.red,
+                dotIncreasedColor: Colors.black,
                 images: [
                   AssetImage('images/banner1.png'),
+                  AssetImage('images/banner3.jpg'),
                   AssetImage('images/banner2.png'),
+                  AssetImage('images/banner4.png'),
+                  AssetImage('images/banner5.jpg'),
+                  AssetImage('images/banner6.png'),
                 ],
               ),
             ),
@@ -189,7 +210,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(14.0),
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       child: new Text('Categories',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17))),
@@ -203,7 +224,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(14.0),
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       child: new Text('Featured products', style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold, fontSize: 17),)),
@@ -216,34 +237,34 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(14.0),
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       child: new Text('Discount products',style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold, fontSize: 17),)),
                 ),
               ],
             ),
-            FeaturedProducts(),
+            DiscountProducts(),
 
             SizedBox(height: 15,),
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(14.0),
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       child: new Text('Today Deals', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 17),)),
                 ),
               ],
             ),
-            FeaturedProducts(),
+            TodayDeals(),
 
 //          recent products
             SizedBox(height: 15,),
             Row(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(14.0),
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       child: new Text('Recent products', style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold, fontSize: 17),)),
@@ -251,17 +272,23 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            Column(
-              children: productProvider.products
-                  .map((item) => GestureDetector(
-                        child: Card(
-                          color: Colors.blueAccent,
-                          child: ProductCard(
-                            product: item,
+            Container(
+              height: 240,
+              child: GridView.count(
+                crossAxisCount: 3,
+                physics: ScrollPhysics(),
+                shrinkWrap: true,
+                children: productProvider.products
+                    .map((item) => GestureDetector(
+                          child: Card(
+                            color: Colors.cyan,
+                            child: RecentCard(
+                              product: item,
+                            ),
                           ),
-                        ),
-                      ))
-                  .toList(),
+                        ))
+                    .toList(),
+              ),
             )
           ],
         ),
