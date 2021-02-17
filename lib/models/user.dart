@@ -37,13 +37,13 @@ class UserModel {
 
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _name = snapshot.data[NAME];
-    _email = snapshot.data[EMAIL];
-    _id = snapshot.data[ID];
-    _image = snapshot.data[IMAGE];
-    _stripeId = snapshot.data[STRIPE_ID] ?? "";
-    cart = _convertCartItems(snapshot.data[CART]?? []);
-    totalCartPrice = snapshot.data[CART] == null ? 0 :getTotalPrice(cart: snapshot.data[CART]);
+    _name = snapshot.data()[NAME];
+    _email = snapshot.data()[EMAIL];
+    _id = snapshot.data()[ID];
+    _image = snapshot.data()[IMAGE];
+    _stripeId = snapshot.data()[STRIPE_ID] ?? "";
+    cart = _convertCartItems(snapshot.data()[CART]?? []);
+    totalCartPrice = snapshot.data()[CART] == null ? 0 :getTotalPrice(cart: snapshot.data()[CART]);
 
   }
 
@@ -60,7 +60,7 @@ class UserModel {
       return 0;
     }
     for(Map cartItem in cart){
-      _priceSum += cartItem["price"];
+      _priceSum += cartItem["qty price"];
     }
 
     int total = _priceSum;

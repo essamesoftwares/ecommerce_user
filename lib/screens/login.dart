@@ -1,5 +1,6 @@
 import 'package:ecommerce_user/helpers/style.dart';
 import 'package:ecommerce_user/provider/user.dart';
+import 'package:ecommerce_user/screens/forgot_password.dart';
 import 'package:ecommerce_user/screens/signup.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
 import 'package:email_validator/email_validator.dart';
@@ -148,7 +149,7 @@ class _LoginState extends State<Login> {
                                       minWidth:
                                           MediaQuery.of(context).size.width,
                                       child: Text(
-                                        "Login",
+                                        "Sign in",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.white,
@@ -163,13 +164,17 @@ class _LoginState extends State<Login> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Forgot password",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: black,
-                                        fontWeight: FontWeight.w400,
+                                    child: TextButton(
+                                      child: Text(
+                                        "Forgot password",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
+                                      onPressed: () => Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => ForgotPassword())),
                                     ),
                                   ),
                                   Padding(

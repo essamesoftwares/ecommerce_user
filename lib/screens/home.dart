@@ -2,11 +2,14 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:ecommerce_user/helpers/common.dart';
 import 'package:ecommerce_user/helpers/style.dart';
+import 'package:ecommerce_user/provider/deals_product.dart';
+import 'package:ecommerce_user/provider/discount_product.dart';
 import 'package:ecommerce_user/provider/product.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/product_search.dart';
 import 'package:ecommerce_user/screens/profile.dart';
 import 'package:ecommerce_user/services/product.dart';
+import 'package:ecommerce_user/widget_card/category.dart';
 import 'package:ecommerce_user/widget_card/discounts.dart';
 import 'package:ecommerce_user/widget_card/today_deals.dart';
 import 'package:ecommerce_user/widgets/categories.dart';
@@ -37,12 +40,9 @@ class _HomePageState extends State<HomePage> {
     "Carrot",
     "Good Day",
     "Horlicks",
-    "Lemon",
     "Potato",
     "Oreo",
-    "Tinda",
     "Cabbage",
-    "Pumbkin",
     "Marie gold",
     "Parle-G",
     "Bournvita",
@@ -55,14 +55,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final productProvider = Provider.of<ProductProvider>(context);
+    final discountProductProvider = Provider.of<DiscountProductProvider>(context);
+    final dealsProductProvider = Provider.of<DealsProductProvider>(context);
     GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
-        title: Text(
-          "Grocery Shop",
-          style: TextStyle(color: Colors.white),
+        title: Row(
+          children: [
+            Text(
+              "Grocery Shop",
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
         ),
       ),
       key: _key,
@@ -172,6 +178,8 @@ class _HomePageState extends State<HomePage> {
                       textInputAction: TextInputAction.search,
                       textSubmitted: (pattern) async {
                         await productProvider.search(productName: pattern);
+                        await discountProductProvider.search(productName: pattern);
+                        await dealsProductProvider.search(productName: pattern);
                         changeScreen(context, ProductSearchScreen());
                       },
                       decoration: InputDecoration(
@@ -217,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Categories(),
+            Category(),
 
 //            featured products
           SizedBox(height: 15,),
@@ -280,11 +288,8 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: true,
                 children: productProvider.products
                     .map((item) => GestureDetector(
-                          child: Card(
-                            color: Colors.cyan,
-                            child: RecentCard(
-                              product: item,
-                            ),
+                          child: RecentCard(
+                            product: item,
                           ),
                         ))
                     .toList(),

@@ -1,6 +1,7 @@
 import 'package:ecommerce_user/helpers/common.dart';
 import 'package:ecommerce_user/helpers/style.dart';
 import 'package:ecommerce_user/provider/user.dart';
+import 'package:ecommerce_user/screens/cart.dart';
 import 'package:ecommerce_user/widgets/featured_catprod.dart';
 import 'package:ecommerce_user/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +27,20 @@ class _CatProductsState extends State<CatProducts> {
             onPressed: () {
               Navigator.pop(context);
             }),
-        title: Text(
-          "Products",
-          style: TextStyle(color: Colors.white),
+        title: Row(
+          children: [
+            Text(
+              "Products",
+              style: TextStyle(color: Colors.white),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 90),
+              child: IconButton(icon: Icon(Icons.shopping_cart), onPressed: () async{
+                await userProvider.getOrders();
+                changeScreen(context, CartScreen());
+              }),
+            )
+          ],
         ),
       ),
       key: _key,
@@ -52,6 +64,14 @@ class _CatProductsState extends State<CatProducts> {
             ListTile(
               onTap: () async {
                 await userProvider.getOrders();
+                changeScreen(context, CartScreen());
+              },
+              leading: Icon(Icons.shopping_cart),
+              title: CustomText(text: "Cart"),
+            ),
+            ListTile(
+              onTap: () async {
+                await userProvider.getOrders();
                 changeScreen(context, OrdersScreen());
               },
               leading: Icon(Icons.bookmark_border),
@@ -68,13 +88,10 @@ class _CatProductsState extends State<CatProducts> {
         ),
       ),
       body: SafeArea(
-        child: Card(
-          color: Colors.deepPurple,
-          child: ListView(
-            children: <Widget>[
-              CatFeatured(),
-            ],
-          ),
+        child: ListView(
+          children: <Widget>[
+            CatFeatured(),
+          ],
         ),
       ),
     );

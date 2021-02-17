@@ -36,9 +36,12 @@ class OrdersScreen extends StatelessWidget {
               subtitle: Text(
                   DateTime.fromMillisecondsSinceEpoch(_order.createdAt)
                       .toString()),
-              trailing: CustomText(
+              trailing: _order.status == "Complete" ? CustomText(
                 text: _order.status,
                 color: green,
+              ) : CustomText(
+                text: _order.status,
+                color: Colors.red,
               ),
             );
           }),

@@ -15,17 +15,14 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
     final productProvider = Provider.of<ProductProvider>(context);
 
     return Container(
-        height: 150,
-        child: Card(
-          color: Colors.black,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: productProvider.products.length,
-              itemBuilder: (_, index) {
-                return FeaturedCard(
-                  product: productProvider.products[index],
-                );
-              }),
-        ));
+        height: 120,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: productProvider.products.length,
+            itemBuilder: (_, index) {
+              return FeaturedCard(
+                product: productProvider.products[index],
+              );
+            }));
   }
 }

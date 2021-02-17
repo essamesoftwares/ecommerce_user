@@ -33,9 +33,10 @@ class RecentCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(80),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey[300],
-                    offset: Offset(-2, -1),
-                    blurRadius: 5),
+                    color: Colors.black,
+                    // offset: Offset(-2, -1),
+                    blurRadius: 2,
+                ),
               ]),
           child: Center(
             child: ClipRRect(

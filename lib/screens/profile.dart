@@ -1,6 +1,8 @@
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/edit_image.dart';
+import 'package:ecommerce_user/screens/forgot_password.dart';
 import 'package:ecommerce_user/screens/profile_image.dart';
+import 'package:ecommerce_user/screens/reset_password.dart';
 import 'package:ecommerce_user/services/profile.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -163,7 +165,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                   );
                                 });
                           },),
-                        )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Material(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.black,
+                              elevation: 0.0,
+                              child: MaterialButton(
+                                  onPressed: () => Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) => ResetPassword())),
+                                minWidth:
+                                MediaQuery.of(context).size.width,
+                                child: Text(
+                                  "Edit/Reset Password",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
+                                ),
+                              )),
+                        ),
                       ],
                     ),
                   );

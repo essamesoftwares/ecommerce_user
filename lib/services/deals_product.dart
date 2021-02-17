@@ -1,20 +1,20 @@
-import 'package:ecommerce_user/models/product.dart';
+import 'package:ecommerce_user/models/today_deals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProductServices {
-  String collection = "products";
+class DealsProductServices {
+  String collection = "today deals";
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<List<ProductModel>> getProducts() async =>
+  Future<List<TodayDealsModel>> getProducts() async =>
       _firestore.collection(collection).get().then((result) {
-        List<ProductModel> products = [];
+        List<TodayDealsModel> products = [];
         for (DocumentSnapshot product in result.docs) {
-          products.add(ProductModel.fromSnapshot(product));
+          products.add(TodayDealsModel.fromSnapshot(product));
         }
         return products;
       });
 
-  Future<List<ProductModel>> searchProducts({String productName}) {
+  Future<List<TodayDealsModel>> searchProducts({String productName}) {
     // code to convert the first character to uppercase
     String searchKey = productName[0].toUpperCase() + productName.substring(1);
     return _firestore
@@ -24,11 +24,11 @@ class ProductServices {
         .endAt([searchKey + '\uf8ff'])
         .get()
         .then((result) {
-          List<ProductModel> products = [];
-          for (DocumentSnapshot product in result.docs) {
-            products.add(ProductModel.fromSnapshot(product));
-          }
-          return products;
-        });
+      List<TodayDealsModel> products = [];
+      for (DocumentSnapshot product in result.docs) {
+        products.add(TodayDealsModel.fromSnapshot(product));
+      }
+      return products;
+    });
   }
 }

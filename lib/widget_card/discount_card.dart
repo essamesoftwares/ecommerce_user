@@ -1,14 +1,14 @@
 import 'package:ecommerce_user/helpers/common.dart';
-import 'package:ecommerce_user/models/product.dart';
-import 'package:ecommerce_user/screens/product_details.dart';
+import 'package:ecommerce_user/models/discount_product.dart';
+import 'package:ecommerce_user/new_screens/discount_product_details.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class FeaturedCard extends StatelessWidget {
-  final ProductModel product;
+class DiscountCard extends StatelessWidget {
+  final DiscountProductModel discountProduct;
 
-  const FeaturedCard({Key key, this.product}) : super(key: key);
+  const DiscountCard({Key key, this.discountProduct}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,8 @@ class FeaturedCard extends StatelessWidget {
         onTap: () {
           changeScreen(
               context,
-              ProductDetails(
-                product: product,
+              DiscountProductDetails(
+                discountProduct: discountProduct,
               ));
         },
         child: Container(
@@ -38,13 +38,13 @@ class FeaturedCard extends StatelessWidget {
               children: <Widget>[
                 Positioned.fill(
                     child: Align(
-                  alignment: Alignment.center,
-                  child: Loading(),
-                )),
+                      alignment: Alignment.center,
+                      child: Loading(),
+                    )),
                 Center(
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
-                    image: product.picture,
+                    image: discountProduct.picture,
                     fit: BoxFit.fill,
                     height: 120,
                     width: 130,
@@ -81,19 +81,54 @@ class FeaturedCard extends StatelessWidget {
                           child: Container())),
                 ),
                 Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 84, top: 4),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.yellow,
+                          border: Border.all(color: Colors.black, width: 2)
+                      ),
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: '${((discountProduct.oldPrice-discountProduct.newPrice)*100~/discountProduct.oldPrice).toInt()}%\n',
+                                    style: TextStyle(
+                                        fontSize: 15, fontWeight: FontWeight.bold, color: Colors.red)),
+                                TextSpan(
+                                    text: 'offer',
+                                    style: TextStyle(
+                                        fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
+
+                              ]))),
+                    ),
+                  ),
+                ),
+
+                Align(
                   alignment: Alignment.bottomLeft,
                   child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                       child: RichText(
                           text: TextSpan(children: [
-                        TextSpan(
-                            text: '${product.name} \n',
-                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: '\₹${product.price} \n',
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold)),
-                      ]))),
+                            TextSpan(
+                                text: '${discountProduct.name} \n',
+                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: '₹${discountProduct.oldPrice}',
+                                style: TextStyle(
+                                    fontSize: 15,decoration: TextDecoration.lineThrough, decorationThickness: 3.5, decorationColor: Colors.red, fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: '\t₹${discountProduct.newPrice}',
+                                style: TextStyle(
+                                    fontSize: 19, fontWeight: FontWeight.bold)),
+                          ]))),
                 )
               ],
             ),

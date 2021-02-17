@@ -3,7 +3,6 @@ import 'package:ecommerce_user/models/cart_item.dart';
 import 'package:ecommerce_user/provider/app.dart';
 import 'package:ecommerce_user/provider/user.dart';
 import 'package:ecommerce_user/screens/address.dart';
-import 'package:ecommerce_user/screens/product_details.dart';
 import 'package:ecommerce_user/services/order.dart';
 import 'package:ecommerce_user/widgets/custom_text.dart';
 import 'package:ecommerce_user/widgets/loading.dart';
@@ -46,9 +45,9 @@ class _CartScreenState extends State<CartScreen> {
               itemCount: userProvider.userModel.cart.length,
               itemBuilder: (_, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(8),
                   child: Container(
-                    height: 120,
+                    height: 100,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: white,
@@ -67,13 +66,13 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           child: Image.network(
                             userProvider.userModel.cart[index].image,
-                            height: 120,
-                            width: 140,
+                            height: 100,
+                            width: 100,
                             fit: BoxFit.fill,
                           ),
                         ),
                         SizedBox(
-                          width: 10,
+                          width: 5,
                         ),
                         Expanded(
                           child: Row(
@@ -87,39 +86,117 @@ class _CartScreenState extends State<CartScreen> {
                                           "\n",
                                       style: TextStyle(
                                           color: black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
+                                          fontSize: 17)),
                                   TextSpan(
                                       text:
-                                          "₹${userProvider.userModel.cart[index].price * count} \n\n",
+                                          "₹${userProvider.userModel.cart[index].price}\n",
                                       style: TextStyle(
                                           color: black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w300)),
+                                          fontSize: 15)),
+                                  TextSpan(
+                                      text:
+                                      "Total: ₹${userProvider.userModel.cart[index].qtyPrice}",
+                                      style: TextStyle(
+                                          color: black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
                                 ]),
                               ),
-                              IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: red,
-                                  ),
-                                  onPressed: () async {
-                                    appProvider.changeIsLoading();
-                                    bool success =
-                                        await userProvider.removeFromCart(
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      IconButton(icon: Icon(Icons.remove_circle_outline, color: userProvider.userModel.cart[index].quantity > 1 ? Colors.red : Colors.grey,), onPressed: () async {
+                                        if(userProvider.userModel.cart[index].quantity > 1){
+                                          appProvider.changeIsLoading();
+                                          bool success = await userProvider.removeQuantity(
+                                              item: userProvider.userModel.cart[index]) && await userProvider.removeFromCart(
+                                              cartItem: userProvider
+                                                  .userModel.cart[index]);
+                                          _onLoading();
+                                          if (success) {
+                                            userProvider.reloadUserModel();
+                                            print("Item removed from cart");
+                                            appProvider.changeIsLoading();
+                                            return;
+                                          } else {
+                                            appProvider.changeIsLoading();
+                                          }
+                                        }
+                                      },),
+                                      Text('${userProvider.userModel.cart[index].quantity}', style: TextStyle(fontWeight: FontWeight.bold),),
+                                      IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.blue,), onPressed: () async {
+                                        appProvider.changeIsLoading();
+                                        bool success = await userProvider.addQuantity(
+                                            item: userProvider.userModel.cart[index]) && await userProvider.removeFromCart(
                                             cartItem: userProvider
                                                 .userModel.cart[index]);
-                                    if (success) {
-                                      userProvider.reloadUserModel();
-                                      print("Item added to cart");
-                                      _key.currentState.showSnackBar(SnackBar(
-                                          content: Text("Removed from Cart!")));
-                                      appProvider.changeIsLoading();
-                                      return;
-                                    } else {
-                                      appProvider.changeIsLoading();
-                                    }
-                                  })
+                                        _onLoading();
+                                        if (success) {
+                                          userProvider.reloadUserModel();
+                                          print("Item added to cart");
+                                          appProvider.changeIsLoading();
+                                          return;
+                                        } else {
+                                          appProvider.changeIsLoading();
+                                        }
+                                      },),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        padding: EdgeInsets.only(right: 10),
+                                          icon: Icon(
+                                            Icons.restore_outlined,
+                                            color: userProvider.userModel.cart[index].quantity > 1 ? Colors.grey : Colors.white,
+                                          ),
+                                          onPressed: () async {
+                                            if(userProvider.userModel.cart[index].quantity > 1){
+                                              appProvider.changeIsLoading();
+                                              bool success = await userProvider.resetQuantity(
+                                                  item: userProvider.userModel.cart[index]) && await userProvider.removeFromCart(
+                                                  cartItem: userProvider
+                                                      .userModel.cart[index]);
+                                              _onLoading();
+                                              if (success) {
+                                                userProvider.reloadUserModel();
+                                                print("Item removed from cart");
+                                                appProvider.changeIsLoading();
+                                                return;
+                                              } else {
+                                                appProvider.changeIsLoading();
+                                              }
+                                            }
+                                          }),
+                                      IconButton(
+                                        padding: EdgeInsets.only(left: 10),
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: red,
+                                          ),
+                                          onPressed: () async {
+                                            appProvider.changeIsLoading();
+                                            bool success =
+                                                await userProvider.removeFromCart(
+                                                    cartItem: userProvider
+                                                        .userModel.cart[index]);
+                                            _onLoading();
+                                            if (success) {
+                                              userProvider.reloadUserModel();
+                                              print("Item added to cart");
+                                              _key.currentState.showSnackBar(SnackBar(
+                                                  content: Text("Removed from Cart!")));
+                                              appProvider.changeIsLoading();
+                                              return;
+                                            } else {
+                                              appProvider.changeIsLoading();
+                                            }
+                                          }),
+                                    ],
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         )
@@ -144,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
                           fontSize: 22,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
-                      text: "₹${userProvider.userModel.totalCartPrice * count}",
+                      text: "₹${userProvider.userModel.totalCartPrice}",
                       style: TextStyle(
                           color: black,
                           fontSize: 22,
@@ -192,99 +269,12 @@ class _CartScreenState extends State<CartScreen> {
                             });
                         return;
                       }
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              //this right here
-                              child: Container(
-                                height: 200,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'You will be charged \₹${userProvider.userModel.totalCartPrice} upon delivery!',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(
-                                        width: 320.0,
-                                        child: RaisedButton(
-                                          onPressed: () async {
-                                            var uuid = Uuid();
-                                            String id = uuid.v4();
-                                            _orderServices.createOrder(
-                                                userId: userProvider.user.uid,
-                                                id: id,
-                                                description:
-                                                    "Some random description",
-                                                status: "complete",
-                                                totalPrice: userProvider
-                                                    .userModel.totalCartPrice,
-                                                cart: userProvider
-                                                    .userModel.cart);
-                                            for (CartItemModel cartItem
-                                                in userProvider
-                                                    .userModel.cart) {
-                                              bool value = await userProvider
-                                                  .completeFromCart(
-                                                      cartItem: cartItem);
-                                              if (value) {
-                                                userProvider.reloadUserModel();
-                                                print("Item added to cart");
-                                                _key.currentState.showSnackBar(
-                                                    SnackBar(
-                                                        content: Text(
-                                                            "Removed from Cart!")));
-                                                return Navigator
-                                                    .pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    Address()));
-                                              } else {
-                                                print("ITEM WAS NOT REMOVED");
-                                              }
-                                            }
-                                            _key.currentState.showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        "Order created!")));
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            "Accept",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          color: const Color(0xFF1BC0C5),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 320.0,
-                                        child: RaisedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              "Reject",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            color: red),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Address()));
+
+
                     },
                     child: CustomText(
                       text: "Check out",
@@ -298,5 +288,32 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Loading...", style: TextStyle(fontWeight: FontWeight.bold),),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    new Future.delayed(new Duration(milliseconds: 1400), () {
+      Navigator.pop(context);
+    });
   }
 }

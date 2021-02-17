@@ -1,4 +1,5 @@
 import 'package:ecommerce_user/provider/product.dart';
+import 'package:ecommerce_user/widgets/catproduct_card.dart';
 import 'package:ecommerce_user/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class _CatFeaturedState extends State<CatFeatured> {
     return Column(
       children: productProvider.products
           .map((item) => GestureDetector(
-        child: ProductCard(
+        child: CategoryCard(
           product: item,
         ),
       ))
